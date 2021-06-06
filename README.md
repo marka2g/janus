@@ -1,4 +1,5 @@
-
+# [Janus, Roman God of Gates](https://en.wikipedia.org/wiki/Janus#:~:text=In%20ancient%20Roman%20religion%20and,depicted%20as%20having%20two%20faces.)
+*a p.o.c. app for a json-only Authentication Api Built with Elixir and Phoenix*
 
 ## Curl the API
 >
@@ -123,9 +124,7 @@
 ---
 ## Build Steps and Commands
 > 1. create the project:
-> 
->> [Janus, Greek God of Gates](https://en.wikipedia.org/wiki/Janus#:~:text=In%20ancient%20Roman%20religion%20and,depicted%20as%20having%20two%20faces.)
->> 
+>  
 >> $ `mix phx.new janus --app janus --module Janus --no-html --no-webpack --binary-id`
 >  
 >>> a. `janus` is the name of the app and dir that's created
