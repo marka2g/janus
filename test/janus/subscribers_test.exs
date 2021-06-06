@@ -84,5 +84,12 @@ defmodule Janus.SubscribersTest do
       user = user_fixture()
       assert %Ecto.Changeset{} = Subscribers.change_user(user)
     end
+
+    test "authenticate_user/2 authenticates the user" do
+      user = user_without_password()
+      assert {:error, "Wrong email or password"} = Subscribers.authenticate_user("wrong email", "")
+      assert {:ok, authenticated_user} = Subscribers.authenticate_user(user.email, @valid_attrs.password)
+      assert user == authenticated_user
+    end
   end
 end

@@ -75,32 +75,32 @@
 >> 
 >> $ `Janus.Subscribers.create_user(%{email: "asd@asd.com", password: "qwerty"})`
 >> #=>
->> ```elixir
->> [debug] QUERY OK db=8.6ms decode=1.7ms queue=0.9ms idle=1671.2ms
->> INSERT INTO "users" ("email","is_active","password_hash","inserted_at","updated_at","id") VALUES ($1,$2,$3,$4,$5,$6) ["asd@asd.com", false, "$pbkdf2-sha512$160000$AOSB9u7vslTK6oF6VIFHUg$GmyTO0NFrXRs21VEUrj.BFdVi1mtTNcYCJHmdnrSPL1GvirYW8u8GQl4C54H02xRAJefnDoivD9jr7Ty75TMZg", ~U[2021-06-06 19:59:21.179695Z], ~U[2021-06-06 19:59:21.179695Z], <<47, 91, 54, 107, 44, 174, 77, 139, 167, 40, 115, 73, 20, 173, 168, 76>>]
->> 
->> {:ok,
->> %Janus.Subscribers.User{
->>   __meta__: #Ecto.Schema.Metadata<:loaded, "users">,
->>   email: "asd@asd.com",
->>   id: "2f5b366b-2cae-4d8b-a728-734914ada84c",
- >>  inserted_at: ~U[2021-06-06 19:59:21.179695Z],
- >>  is_active: false,
- >>  password: "qwerty",
- >>  password_hash: "$pbkdf2-sha512$160000$AOSB9u7vslTK6oF6VIFHUg$GmyTO0NFrXRs21VEUrj.BFdVi1mtTNcYCJHmdnrSPL1GvirYW8u8GQl4C54H02xRAJefnDoivD9jr7Ty75TMZg",
->>   type: nil,
->>   updated_at: ~U[2021-06-06 19:59:21.179695Z],
->>   wordpress_id: nil
->> }}
->> ```
+>>> ```elixir
+>>> [debug] QUERY OK db=8.6ms decode=1.7ms queue=0.9ms idle=1671.2ms
+>>> INSERT INTO "users" ("email","is_active","password_hash","inserted_at","updated_at","id") VALUES ($1,$2,$3,$4,$5,$6) ["asd@asd.com", false, "$pbkdf2-sha512$160000$AOSB9u7vslTK6oF6VIFHUg$GmyTO0NFrXRs21VEUrj.BFdVi1mtTNcYCJHmdnrSPL1GvirYW8u8GQl4C54H02xRAJefnDoivD9jr7Ty75TMZg", ~U[2021-06-06 19:59:21.179695Z], ~U[2021-06-06 19:59:21.179695Z], <<47, 91, 54, 107, 44, 174, 77, 139, 167, 40, 115, 73, 20, 173, 168, 76>>]
+>>> 
+>>> {:ok,
+>>> %Janus.Subscribers.User{
+>>>   __meta__: #Ecto.Schema.Metadata<:loaded, "users">,
+>>>   email: "asd@asd.com",
+>>>   id: "2f5b366b-2cae-4d8b-a728-734914ada84c",
+>>>  inserted_at: ~U[2021-06-06 19:59:21.179695Z],
+>>>  is_active: false,
+>>>  password: "qwerty",
+>>>  password_hash: "$pbkdf2-sha512$160000$AOSB9u7vslTK6oF6VIFHUg$GmyTO0NFrXRs21VEUrj.BFdVi1mtTNcYCJHmdnrSPL1GvirYW8u8GQl4C54H02xRAJefnDoivD9jr7Ty75TMZg",
+>>>  type: nil,
+>>>  updated_at: ~U[2021-06-06 19:59:21.179695Z],
+>>>  wordpress_id: nil
+>>> }}
+>>> ```
 >
 > added seeds, run seeds `mix run priv/repo/seeds.exs`
 >
 > test the sign_in endpoint with `curl`
 >
-> *good creds:*
->>```bash
->> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"1resu"}' http://localhost:4000/api/users/sign_in -i
+>> *good creds:*
+>>>```bash
+>>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"1resu"}' http://localhost:4000/api/users/sign_in -i
 >>> #=>
 >>> HTTP/1.1 200 OK
 >>> cache-control: max-age=0, private, must-revalidate
@@ -111,11 +111,11 @@
 >>> x-request-id: FoYaOm2Yl-rC6gwAAACB
 >>> 
 >>> {"data":{"email":"user1@asd.com",>>> "id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164"}}
->>```
+>>>```
 >
-> *bad creds:*
->>```bash
->> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"bad password"}' http://localhost:4000/api/users/sign_in -i
+>> *bad creds:*
+>>>```bash
+>>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"bad password"}' http://localhost:4000/api/users/sign_in -i
 >>> #=>
 >>> HTTP/1.1 401 Unauthorized
 >>> cache-control: max-age=0, private, must-revalidate
@@ -126,11 +126,64 @@
 >>> x-request-id: FoYac9-eU7jkP7kAAAJE
 >>> 
 >>> {"errors":{"detail":"Wrong email or password"}}
+>>>```
+>
+> test the sign_in endpoint with `curl` and cookies. `-c cookies.txt -b cookies.txt -i` how we enable cookies with curl.
+which give us session support
+> 
+>> *bad creds:*
+>>>```bash
+>>> curl -H "Content-Type: application/json" -X GET http://localhost:4000/api/users -c cookies.txt -b cookies.txt -i
+>>> #=>
+>>> HTTP/1.1 401 Unauthorized
+>>> cache-control: max-age=0, private, must-revalidate
+>>> content-length: 44
+>>> content-type: application/json; charset=utf-8
+>>> date: Sun, 06 Jun 2021 22:00:04 GMT
+>>> server: Cowboy
+>>> x-request-id: FoYdL4dfMtDkP7kAAABC
+>>> 
+>>> {"errors":{"detail":"Wrong email or password"}}
 >>```
-
+>
+>> *good creds:*
+>>>```bash
+>>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"1resu"}' http://localhost:4000/api/users/sign_in -c cookies.txt -b cookies.txt -i
+>>> #=>
+>>> HTTP/1.1 200 OK
+>>> cache-control: max-age=0, private, must-revalidate
+>>> content-length: 78
+>>> content-type: application/json; charset=utf-8
+>>> date: Sun, 06 Jun 2021 22:03:39 GMT
+>>> server: Cowboy
+>>> x-request-id: FoYdYWwoUurBqs4AAACC
+>>> set-cookie: _janus_key=SFMyNTY.g3QAAAABbQAAAA9jdXJyZW50X3VzZXJfaWRtAAAAJDdlZTE5ODQwLWU1ZDEtNDBhYy04YjM4LWI1OGFlMjllNTE2NA.pnxriFR5TS51lBvU4DIj_sBcvYHv4NWm7A0naq-iLEg; path=/; HttpOnly
+>>>
+>>> {"data":{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164"}}
+>>>```
+>>
+>> *now, if u try requesting the resource again, you'll see:*
+>> 
+>>>```bash
+>>> curl -H "Content-Type: application/json" -X GET http://localhost:4000/api/users -c cookies.txt -b cookies.txt -i
+>>> #=>
+>>> HTTP/1.1 200 OK
+>>> cache-control: max-age=0, private, must-revalidate
+>>> content-length: 362
+>>> content-type: application/json; charset=utf-8
+>>> date: Sun, 06 Jun 2021 22:11:06 GMT
+>>> server: Cowboy
+>>> x-request-id: FoYdyXnDqWSpXQgAAAJB
+>>>```
+>>>```json
+>>> {"data":[{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164","is_active":false},{"email":"user2@asd.com","id":"10f3d8a0-2431-4bb8-b3c8-b7d77e6f3d94","is_active":false},{"email":"user3@asd.com","id":"150442fc-a7c7-4640-b2cc-c30790363110","is_active":false},{"email":"user4@asd.com","id":"5a2ce641-8b9b-41a4-bd55-c95fe003771c","is_active":false}]}
+>>>```
 
 ---
 ### Links of Interest
+
+#### Security
+[prevent a session fixation attack](https://owasp.org/www-community/attacks/Session_fixation)
 #### Intergrating Rails
 > [Using phoenix with legacy rails app](https://littlelines.com/blog/2016/09/27/using-phoenix-with-a-legagy-rails-app)
 >
