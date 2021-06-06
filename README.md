@@ -8,7 +8,7 @@
 >> curl -H "Content-Type: application/json" -X POST -d '{"user":{"email":"some@email.com","password":"some password"}}' http://localhost:4000/api/users
 >> ```
 >
-> **test the sign_in endpoint:**
+> **Test the sign_in endpoint:**
 >
 >> *good creds:*
 >>>```bash
@@ -40,7 +40,7 @@
 >>> {"errors":{"detail":"Wrong email or password"}}
 >>>```
 >
-> **test the sign_in endpoint** with cookies. `-c cookies.txt -b cookies.txt -i` how we enable cookies with curl which give us session support
+> **Test the sign_in endpoint** with cookies. `-c cookies.txt -b cookies.txt -i` how we enable cookies with curl which give us session support
 > 
 >> *bad creds:*
 >>>```bash
