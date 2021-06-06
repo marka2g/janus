@@ -101,4 +101,26 @@ defmodule Janus.Subscribers do
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
   end
+
+  @doc """
+  Simple User Authentication using Pbkdf2.verify_pass/2
+  """
+  def authenticate_user(email, password) do
+    query = from(u in User, where: u.email == ^email)
+    query |> Repo.one() |> verify_password(password)
+  end
+
+  defp verify_password(nil, _) do
+    # perform a dummy check to make user enumeration more difficult
+    Pbkdf2.no_user_verify()
+    {:error, "Wrong email or password"}
+  end
+
+  defp verify_password(user, password) do
+    if Pbkdf2.verify_pass(password, user.password_hash) do
+      {:ok, user}
+    else
+      {:error, "Wrong email or password"}
+    end
+  end
 end

@@ -159,8 +159,7 @@
 >
 
 ---
----
-#### Phoenix boiler plate
+### Phoenix boiler plate
 
 To start your Phoenix server:
 
