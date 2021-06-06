@@ -1,4 +1,115 @@
 
+
+## Curl the API
+>
+> **Create a user:**
+>
+>> ```bash
+>> curl -H "Content-Type: application/json" -X POST -d '{"user":{"email":"some@email.com","password":"some password"}}' http://localhost:4000/api/users
+>> ```
+>
+> **test the sign_in endpoint:**
+>
+>> *good creds:*
+>>>```bash
+>>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"1resu"}' http://localhost:4000/api/users/sign_in -i
+>>> #=>
+>>> HTTP/1.1 200 OK
+>>> cache-control: max-age=0, private, must-revalidate
+>>> content-length: 78
+>>> content-type: application/json; charset=utf-8
+>>> date: Sun, 06 Jun 2021 21:05:54 GMT
+>>> server: Cowboy
+>>> x-request-id: FoYaOm2Yl-rC6gwAAACB
+>>> 
+>>> {"data":{"email":"user1@asd.com",>>> "id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164"}}
+>>>```
+>
+>> *bad creds:*
+>>>```bash
+>>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"bad password"}' http://localhost:4000/api/users/sign_in -i
+>>> #=>
+>>> HTTP/1.1 401 Unauthorized
+>>> cache-control: max-age=0, private, must-revalidate
+>>> content-length: 47
+>>> content-type: application/json; charset=utf-8
+>>> date: Sun, 06 Jun 2021 21:10:01 GMT
+>>> server: Cowboy
+>>> x-request-id: FoYac9-eU7jkP7kAAAJE
+>>> 
+>>> {"errors":{"detail":"Wrong email or password"}}
+>>>```
+>
+> **test the sign_in endpoint** with cookies. `-c cookies.txt -b cookies.txt -i` how we enable cookies with curl which give us session support
+> 
+>> *bad creds:*
+>>>```bash
+>>> curl -H "Content-Type: application/json" -X GET http://localhost:4000/api/users -c cookies.txt -b cookies.txt -i
+>>> #=>
+>>> HTTP/1.1 401 Unauthorized
+>>> cache-control: max-age=0, private, must-revalidate
+>>> content-length: 44
+>>> content-type: application/json; charset=utf-8
+>>> date: Sun, 06 Jun 2021 22:00:04 GMT
+>>> server: Cowboy
+>>> x-request-id: FoYdL4dfMtDkP7kAAABC
+>>> 
+>>> {"errors":{"detail":"Wrong email or password"}}
+>>```
+>
+>> *good creds:*
+>>>```bash
+>>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"1resu"}' http://localhost:4000/api/users/sign_in -c cookies.txt -b cookies.txt -i
+>>> #=>
+>>> HTTP/1.1 200 OK
+>>> cache-control: max-age=0, private, must-revalidate
+>>> content-length: 78
+>>> content-type: application/json; charset=utf-8
+>>> date: Sun, 06 Jun 2021 22:03:39 GMT
+>>> server: Cowboy
+>>> x-request-id: FoYdYWwoUurBqs4AAACC
+>>> set-cookie: _janus_key=SFMyNTY.g3QAAAABbQAAAA9jdXJyZW50X3VzZXJfaWRtAAAAJDdlZTE5ODQwLWU1ZDEtNDBhYy04YjM4LWI1OGFlMjllNTE2NA.pnxriFR5TS51lBvU4DIj_sBcvYHv4NWm7A0naq-iLEg; path=/; HttpOnly
+>>>
+>>> {"data":{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164"}}
+>>>```
+>>
+>> *now, if u try requesting the resource again, you'll see:*
+>> 
+>>>```bash
+>>> curl -H "Content-Type: application/json" -X GET http://localhost:4000/api/users -c cookies.txt -b cookies.txt -i
+>>> #=>
+>>> HTTP/1.1 200 OK
+>>> cache-control: max-age=0, private, must-revalidate
+>>> content-length: 362
+>>> content-type: application/json; charset=utf-8
+>>> date: Sun, 06 Jun 2021 22:11:06 GMT
+>>> server: Cowboy
+>>> x-request-id: FoYdyXnDqWSpXQgAAAJB
+>>>```
+>>>```json
+>>> {"data":[{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164","is_active":false},{"email":"user2@asd.com","id":"10f3d8a0-2431-4bb8-b3c8-b7d77e6f3d94","is_active":false},{"email":"user3@asd.com","id":"150442fc-a7c7-4640-b2cc-c30790363110","is_active":false},{"email":"user4@asd.com","id":"5a2ce641-8b9b-41a4-bd55-c95fe003771c","is_active":false}]}
+>>>```
+>
+> **List users:**
+>
+>>>```bash
+>>> curl -X GET "Content-Type: application/json" http://localhost:4000/api/users
+> #=> 
+>>>```json
+>>> {"data":[{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164","is_active":false},{"email":"user2@asd.com","id":"10f3d8a0-2431-4bb8-b3c8-b7d77e6f3d94","is_active":false},{"email":"user3@asd.com","id":"150442fc-a7c7-4640-b2cc-c30790363110","is_active":false},{"email":"user4@asd.com","id":"5a2ce641-8b9b-41a4-bd55-c95fe003771c","is_active":false}]}
+>>>```
+>
+> **Find a user:**
+>
+>>>```bash
+>>> curl -X GET "Content-Type: application/json" http://localhost:4000/api/users/7ee19840-e5d1-40ac-8b38-b58ae29e5164
+>>>```
+>> #=> 
+>> ```json
+>>{"data":[{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164","is_active":false}}%
+>>```
+>
+---
 ## Build Steps and Commands
 > 1. create the project:
 > 
@@ -64,13 +175,8 @@
 >>> 
 >>>  `resources "/users", UserController, except: [:new, :edit]`
 >
-> how to create a subscriber
->>
->> **using `curl`**
->> ```bash
->> curl -H "Content-Type: application/json" -X POST -d '{"user":{"email":"some@email.com","password":"some password"}}' http://localhost:4000/api/users
->> ```
->>
+> how to create a subscriber. for curl, see the `Curl the API` section above
+> 
 >> **on a `iex -S mix` console:**
 >> 
 >> $ `Janus.Subscribers.create_user(%{email: "asd@asd.com", password: "qwerty"})`
@@ -95,89 +201,7 @@
 >>> ```
 >
 > added seeds, run seeds `mix run priv/repo/seeds.exs`
->
-> test the sign_in endpoint with `curl`
->
->> *good creds:*
->>>```bash
->>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"1resu"}' http://localhost:4000/api/users/sign_in -i
->>> #=>
->>> HTTP/1.1 200 OK
->>> cache-control: max-age=0, private, must-revalidate
->>> content-length: 78
->>> content-type: application/json; charset=utf-8
->>> date: Sun, 06 Jun 2021 21:05:54 GMT
->>> server: Cowboy
->>> x-request-id: FoYaOm2Yl-rC6gwAAACB
->>> 
->>> {"data":{"email":"user1@asd.com",>>> "id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164"}}
->>>```
->
->> *bad creds:*
->>>```bash
->>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"bad password"}' http://localhost:4000/api/users/sign_in -i
->>> #=>
->>> HTTP/1.1 401 Unauthorized
->>> cache-control: max-age=0, private, must-revalidate
->>> content-length: 47
->>> content-type: application/json; charset=utf-8
->>> date: Sun, 06 Jun 2021 21:10:01 GMT
->>> server: Cowboy
->>> x-request-id: FoYac9-eU7jkP7kAAAJE
->>> 
->>> {"errors":{"detail":"Wrong email or password"}}
->>>```
->
-> test the sign_in endpoint with `curl` and cookies. `-c cookies.txt -b cookies.txt -i` how we enable cookies with curl.
-which give us session support
-> 
->> *bad creds:*
->>>```bash
->>> curl -H "Content-Type: application/json" -X GET http://localhost:4000/api/users -c cookies.txt -b cookies.txt -i
->>> #=>
->>> HTTP/1.1 401 Unauthorized
->>> cache-control: max-age=0, private, must-revalidate
->>> content-length: 44
->>> content-type: application/json; charset=utf-8
->>> date: Sun, 06 Jun 2021 22:00:04 GMT
->>> server: Cowboy
->>> x-request-id: FoYdL4dfMtDkP7kAAABC
->>> 
->>> {"errors":{"detail":"Wrong email or password"}}
->>```
->
->> *good creds:*
->>>```bash
->>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"1resu"}' http://localhost:4000/api/users/sign_in -c cookies.txt -b cookies.txt -i
->>> #=>
->>> HTTP/1.1 200 OK
->>> cache-control: max-age=0, private, must-revalidate
->>> content-length: 78
->>> content-type: application/json; charset=utf-8
->>> date: Sun, 06 Jun 2021 22:03:39 GMT
->>> server: Cowboy
->>> x-request-id: FoYdYWwoUurBqs4AAACC
->>> set-cookie: _janus_key=SFMyNTY.g3QAAAABbQAAAA9jdXJyZW50X3VzZXJfaWRtAAAAJDdlZTE5ODQwLWU1ZDEtNDBhYy04YjM4LWI1OGFlMjllNTE2NA.pnxriFR5TS51lBvU4DIj_sBcvYHv4NWm7A0naq-iLEg; path=/; HttpOnly
->>>
->>> {"data":{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164"}}
->>>```
->>
->> *now, if u try requesting the resource again, you'll see:*
->> 
->>>```bash
->>> curl -H "Content-Type: application/json" -X GET http://localhost:4000/api/users -c cookies.txt -b cookies.txt -i
->>> #=>
->>> HTTP/1.1 200 OK
->>> cache-control: max-age=0, private, must-revalidate
->>> content-length: 362
->>> content-type: application/json; charset=utf-8
->>> date: Sun, 06 Jun 2021 22:11:06 GMT
->>> server: Cowboy
->>> x-request-id: FoYdyXnDqWSpXQgAAAJB
->>>```
->>>```json
->>> {"data":[{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164","is_active":false},{"email":"user2@asd.com","id":"10f3d8a0-2431-4bb8-b3c8-b7d77e6f3d94","is_active":false},{"email":"user3@asd.com","id":"150442fc-a7c7-4640-b2cc-c30790363110","is_active":false},{"email":"user4@asd.com","id":"5a2ce641-8b9b-41a4-bd55-c95fe003771c","is_active":false}]}
->>>```
+
 
 ---
 ### Links of Interest
