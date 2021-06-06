@@ -22,8 +22,8 @@ defmodule Janus.Subscribers.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:type, :email, :password, :is_active])
-    |> validate_required([:type, :email, :password, :is_active])
+    |> cast(attrs, [:email, :password, :is_active])
+    |> validate_required([:email, :password, :is_active])
     |> unique_constraint(:email)
     |> put_password_hash()
   end

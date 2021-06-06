@@ -52,7 +52,6 @@ defmodule Janus.SubscribersTest do
       assert user.email == "some email"
       assert user.is_active == true
       assert user.password == "some password"
-      assert user.type == "Subscriber"
       assert Pbkdf2.verify_pass("some password", user.password_hash)
     end
 

@@ -46,8 +46,57 @@
 >> injecting test/janus/subscribers_test.exs
 >
 >> $ `mix ecto.migrate`
-
+>
 > a note on `bcrypt_elixir` v. `pbkdf2_elixir`.  i went with `pbkdf2_elixir` because there are [issues with the underlying nifs on gcp compute engine](https://elixirforum.com/t/deployment-to-google-compute-engine/20409)
+> 
+> 7. generate the Users json endpoint.  note the `--no-context` and `--no-schema` opts
+> 
+>> $ `mix phx.gen.json Subscribers User users email:string password:string is_active:boolean --no-context --no-schema`
+>> 
+>> #=>
+>>>  creating lib/janus_web/controllers/user_controller.ex
+>>> creating lib/janus_web/views/user_view.ex
+>>> creating test/janus_web/controllers/user_controller_test.exs
+>>> creating lib/janus_web/views/changeset_view.ex
+>>> creating lib/janus_web/controllers/fallback_controller.ex
+>>> 
+>>> Add the resource to your :api scope in lib/janus_web/router.ex:
+>>> 
+>>>  `resources "/users", UserController, except: [:new, :edit]`
+>
+> how to create a subscriber
+>>
+>> **using `curl`**
+>> ```bash
+>> curl -H "Content-Type: application/json" -X POST -d '{"user":{"email":"some@email.com","password":"some password"}}' http://localhost:4000/api/users
+>> ```
+>>
+>> **on a `iex -S mix` console:**
+>> 
+>> $ `Janus.Subscribers.create_user(%{email: "asd@asd.com", password: "qwerty"})`
+>> #=>
+>> ```elixir
+>> [debug] QUERY OK db=8.6ms decode=1.7ms queue=0.9ms idle=1671.2ms
+>> INSERT INTO "users" ("email","is_active","password_hash","inserted_at","updated_at","id") VALUES ($1,$2,$3,$4,$5,$6) ["asd@asd.com", false, "$pbkdf2-sha512$160000$AOSB9u7vslTK6oF6VIFHUg$GmyTO0NFrXRs21VEUrj.BFdVi1mtTNcYCJHmdnrSPL1GvirYW8u8GQl4C54H02xRAJefnDoivD9jr7Ty75TMZg", ~U[2021-06-06 19:59:21.179695Z], ~U[2021-06-06 19:59:21.179695Z], <<47, 91, 54, 107, 44, 174, 77, 139, 167, 40, 115, 73, 20, 173, 168, 76>>]
+>> 
+>> {:ok,
+>> %Janus.Subscribers.User{
+>>   __meta__: #Ecto.Schema.Metadata<:loaded, "users">,
+>>   email: "asd@asd.com",
+>>   id: "2f5b366b-2cae-4d8b-a728-734914ada84c",
+ >>  inserted_at: ~U[2021-06-06 19:59:21.179695Z],
+ >>  is_active: false,
+ >>  password: "qwerty",
+ >>  password_hash: "$pbkdf2-sha512$160000$AOSB9u7vslTK6oF6VIFHUg$GmyTO0NFrXRs21VEUrj.BFdVi1mtTNcYCJHmdnrSPL1GvirYW8u8GQl4C54H02xRAJefnDoivD9jr7Ty75TMZg",
+>>   type: nil,
+>>   updated_at: ~U[2021-06-06 19:59:21.179695Z],
+>>   wordpress_id: nil
+>> }}
+>> ```
+>
+> added seeds, run seeds `mix run priv/repo/seeds.exs`
+>
+>
 
 ---
 ### Links of Interest
