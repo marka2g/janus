@@ -13,7 +13,9 @@
 >> *good creds:*
 >>>```bash
 >>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"1resu"}' http://localhost:4000/api/users/sign_in -i
+>>>```
 >>> #=>
+>>>```bash
 >>> HTTP/1.1 200 OK
 >>> cache-control: max-age=0, private, must-revalidate
 >>> content-length: 78
@@ -28,7 +30,9 @@
 >> *bad creds:*
 >>>```bash
 >>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"bad password"}' http://localhost:4000/api/users/sign_in -i
+>>>```
 >>> #=>
+>>>```bash
 >>> HTTP/1.1 401 Unauthorized
 >>> cache-control: max-age=0, private, must-revalidate
 >>> content-length: 47
@@ -45,7 +49,9 @@
 >> *bad creds:*
 >>>```bash
 >>> curl -H "Content-Type: application/json" -X GET http://localhost:4000/api/users -c cookies.txt -b cookies.txt -i
+>>>```
 >>> #=>
+>>>```bash
 >>> HTTP/1.1 401 Unauthorized
 >>> cache-control: max-age=0, private, must-revalidate
 >>> content-length: 44
@@ -55,12 +61,14 @@
 >>> x-request-id: FoYdL4dfMtDkP7kAAABC
 >>> 
 >>> {"errors":{"detail":"Wrong email or password"}}
->>```
+>>>```
 >
 >> *good creds:*
 >>>```bash
 >>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"1resu"}' http://localhost:4000/api/users/sign_in -c cookies.txt -b cookies.txt -i
+>>>```
 >>> #=>
+>>>```bash
 >>> HTTP/1.1 200 OK
 >>> cache-control: max-age=0, private, must-revalidate
 >>> content-length: 78
@@ -77,7 +85,9 @@
 >> 
 >>>```bash
 >>> curl -H "Content-Type: application/json" -X GET http://localhost:4000/api/users -c cookies.txt -b cookies.txt -i
+>>>```
 >>> #=>
+>>>```bash
 >>> HTTP/1.1 200 OK
 >>> cache-control: max-age=0, private, must-revalidate
 >>> content-length: 362
@@ -95,6 +105,7 @@
 >>>```bash
 >>> curl -X GET "Content-Type: application/json" http://localhost:4000/api/users
 > #=> 
+> >>>```
 >>>```json
 >>> {"data":[{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164","is_active":false},{"email":"user2@asd.com","id":"10f3d8a0-2431-4bb8-b3c8-b7d77e6f3d94","is_active":false},{"email":"user3@asd.com","id":"150442fc-a7c7-4640-b2cc-c30790363110","is_active":false},{"email":"user4@asd.com","id":"5a2ce641-8b9b-41a4-bd55-c95fe003771c","is_active":false}]}
 >>>```
@@ -104,10 +115,10 @@
 >>>```bash
 >>> curl -X GET "Content-Type: application/json" http://localhost:4000/api/users/7ee19840-e5d1-40ac-8b38-b58ae29e5164
 >>>```
->> #=> 
->> ```json
->>{"data":[{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164","is_active":false}}%
->>```
+>>> #=> 
+>>> ```json
+>>>{"data":[{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164","is_active":false}}%
+>>>```
 >
 ---
 ## Build Steps and Commands
