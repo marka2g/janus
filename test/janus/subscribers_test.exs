@@ -6,9 +6,23 @@ defmodule Janus.SubscribersTest do
   describe "users" do
     alias Janus.Subscribers.User
 
-    @valid_attrs %{email: "some email", is_active: true, password_hash: "some password_hash", type: "some type", wordpress_id: "some wordpress_id"}
-    @update_attrs %{email: "some updated email", is_active: false, password_hash: "some updated password_hash", type: "some updated type", wordpress_id: "some updated wordpress_id"}
-    @invalid_attrs %{email: nil, is_active: nil, password_hash: nil, type: nil, wordpress_id: nil}
+    @valid_attrs %{
+      email: "some email", 
+      is_active: true, 
+      password: "some password", 
+      type: "Subscriber"
+    }
+    @update_attrs %{
+      email: "some updated email", 
+      is_active: false, 
+      password: "some updated password"
+    }
+    @invalid_attrs %{
+      email: nil, 
+      is_active: nil, 
+      password: nil, 
+      type: nil
+    }
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -19,13 +33,17 @@ defmodule Janus.SubscribersTest do
       user
     end
 
+    def user_without_password(attrs \\ %{}) do
+      %{user_fixture(attrs) | password: nil}
+    end
+
     test "list_users/0 returns all users" do
-      user = user_fixture()
+      user = user_without_password()
       assert Subscribers.list_users() == [user]
     end
 
     test "get_user!/1 returns the user with given id" do
-      user = user_fixture()
+      user = user_without_password()
       assert Subscribers.get_user!(user.id) == user
     end
 
@@ -33,9 +51,9 @@ defmodule Janus.SubscribersTest do
       assert {:ok, %User{} = user} = Subscribers.create_user(@valid_attrs)
       assert user.email == "some email"
       assert user.is_active == true
-      assert user.password_hash == "some password_hash"
-      assert user.type == "some type"
-      assert user.wordpress_id == "some wordpress_id"
+      assert user.password == "some password"
+      assert user.type == "Subscriber"
+      assert Pbkdf2.verify_pass("some password", user.password_hash)
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -47,13 +65,12 @@ defmodule Janus.SubscribersTest do
       assert {:ok, %User{} = user} = Subscribers.update_user(user, @update_attrs)
       assert user.email == "some updated email"
       assert user.is_active == false
-      assert user.password_hash == "some updated password_hash"
-      assert user.type == "some updated type"
-      assert user.wordpress_id == "some updated wordpress_id"
+      assert user.password == "some updated password"
+      assert Pbkdf2.verify_pass("some updated password", user.password_hash)
     end
 
     test "update_user/2 with invalid data returns error changeset" do
-      user = user_fixture()
+      user = user_without_password()
       assert {:error, %Ecto.Changeset{}} = Subscribers.update_user(user, @invalid_attrs)
       assert user == Subscribers.get_user!(user.id)
     end
