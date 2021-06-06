@@ -1,6 +1,13 @@
 # [Janus, Roman God of Gates](https://en.wikipedia.org/wiki/Janus#:~:text=In%20ancient%20Roman%20religion%20and,depicted%20as%20having%20two%20faces.)
 *a p.o.c. app for a json-only Authentication Api Built with Elixir and Phoenix*
 
+### ToDo's
+1. implement rails-reverse-proxy for existing output api `/v1/auth` akin to something discussed here: [Using phoenix with legacy rails app](https://littlelines.com/blog/2016/09/27/using-phoenix-with-a-legagy-rails-app)
+2. implement `sign_out`
+3. segregate `sing_in`/`sign_out` into its own `SessionController`
+4. implement `is_active` around subscriptions
+5. implement a `/api/arcade` endpoint that can return a `current_user` and serve as a kind of `ping` to see if the user is still logged in. currently, arcade hits middleware on the output api for this
+
 ## Curl the API
 >
 > **Create a user:**
