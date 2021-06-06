@@ -96,7 +96,38 @@
 >
 > added seeds, run seeds `mix run priv/repo/seeds.exs`
 >
+> test the sign_in endpoint with `curl`
 >
+> *good creds:*
+>>```bash
+>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"1resu"}' http://localhost:4000/api/users/sign_in -i
+>>> #=>
+>>> HTTP/1.1 200 OK
+>>> cache-control: max-age=0, private, must-revalidate
+>>> content-length: 78
+>>> content-type: application/json; charset=utf-8
+>>> date: Sun, 06 Jun 2021 21:05:54 GMT
+>>> server: Cowboy
+>>> x-request-id: FoYaOm2Yl-rC6gwAAACB
+>>> 
+>>> {"data":{"email":"user1@asd.com",>>> "id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164"}}
+>>```
+>
+> *bad creds:*
+>>```bash
+>> curl -H "Content-Type: application/json" -X POST -d '{"email":"user1@asd.com","password":"bad password"}' http://localhost:4000/api/users/sign_in -i
+>>> #=>
+>>> HTTP/1.1 401 Unauthorized
+>>> cache-control: max-age=0, private, must-revalidate
+>>> content-length: 47
+>>> content-type: application/json; charset=utf-8
+>>> date: Sun, 06 Jun 2021 21:10:01 GMT
+>>> server: Cowboy
+>>> x-request-id: FoYac9-eU7jkP7kAAAJE
+>>> 
+>>> {"errors":{"detail":"Wrong email or password"}}
+>>```
+
 
 ---
 ### Links of Interest
@@ -159,8 +190,7 @@
 >
 
 ---
----
-#### Phoenix boiler plate
+### Phoenix boiler plate
 
 To start your Phoenix server:
 
