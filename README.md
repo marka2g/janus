@@ -184,6 +184,11 @@ which give us session support
 
 #### Security
 [prevent a session fixation attack](https://owasp.org/www-community/attacks/Session_fixation)
+
+[info on CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+
+[corsica hex lib with the CorsPlug](https://hexdocs.pm/corsica/Corsica.html)
+
 #### Intergrating Rails
 > [Using phoenix with legacy rails app](https://littlelines.com/blog/2016/09/27/using-phoenix-with-a-legagy-rails-app)
 >

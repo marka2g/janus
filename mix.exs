@@ -44,7 +44,8 @@ defmodule Janus.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:ecto_psql_extras, "~> 0.2"},
-      {:pbkdf2_elixir, "~> 1.4"}
+      {:pbkdf2_elixir, "~> 1.4"},
+      {:corsica, "~> 1.1.3"}
     ]
   end
 

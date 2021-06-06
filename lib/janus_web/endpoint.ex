@@ -49,4 +49,11 @@ defmodule JanusWeb.Endpoint do
   plug Plug.Head
   plug Plug.Session, @session_options
   plug JanusWeb.Router
+
+  plug Corsica,
+    # origins can accept a list coposed of strings or regex, i.e. [] 
+    origins: "http://localhost:8080",
+    allow_credentials: true,
+    allow_headers: ["ContentType"],
+    log: [rejected: :error, invalid: :warn, accepted: :debug]
 end
