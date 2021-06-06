@@ -46,11 +46,15 @@ defmodule JanusWeb.UserController do
     case Janus.Subscribers.authenticate_user(email, password) do
       {:ok, user} ->
         conn
+        # it’s good practice to renew the session whenever you upgrade it from a guest state to an authenticated state. this helps to prevent a session fixation attack
+        |> put_session(:current_user_id, user.id)
+        |> configure_session(renew: true)
         |> put_status(:ok)
         |> put_view(JanusWeb.UserView)
         |> render("sign_in.json", user: user)
       {:error, message} ->
         conn
+        |> delete_session(:current_user_id)
         |> put_status(:unauthorized)
         |> put_view(JanusWeb.ErrorView)
         |> render("401.json", message: message)
