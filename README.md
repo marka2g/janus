@@ -104,8 +104,8 @@
 >
 >>>```bash
 >>> curl -X GET "Content-Type: application/json" http://localhost:4000/api/users
-> #=> 
-> >>>```
+>>>```
+>>> #=> 
 >>>```json
 >>> {"data":[{"email":"user1@asd.com","id":"7ee19840-e5d1-40ac-8b38-b58ae29e5164","is_active":false},{"email":"user2@asd.com","id":"10f3d8a0-2431-4bb8-b3c8-b7d77e6f3d94","is_active":false},{"email":"user3@asd.com","id":"150442fc-a7c7-4640-b2cc-c30790363110","is_active":false},{"email":"user4@asd.com","id":"5a2ce641-8b9b-41a4-bd55-c95fe003771c","is_active":false}]}
 >>>```
