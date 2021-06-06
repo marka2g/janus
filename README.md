@@ -47,6 +47,8 @@
 >
 >> $ `mix ecto.migrate`
 
+> a note on `bcrypt_elixir` v. `pbkdf2_elixir`.  i went with `pbkdf2_elixir` because there are [issues with the underlying nifs on gcp compute engine](https://elixirforum.com/t/deployment-to-google-compute-engine/20409)
+
 ---
 ### Links of Interest
 #### Intergrating Rails
@@ -70,7 +72,7 @@
 >
 >[GCP Elixir Samples](https://github.com/GoogleCloudPlatform/elixir-samples)
 >
->[GCP Elixir Samples - Auth](https://github.com/GoogleCloudPlatform/elixir-samples/tree/master/auth)
+>> [GCP Elixir Samples - Auth](https://github.com/GoogleCloudPlatform/elixir-samples/tree/master/auth)
 >
 >[GCP IAP - TCP Forwarding](https://cloud.google.com/iap/docs/using-tcp-forwarding)
 >

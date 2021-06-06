@@ -20,3 +20,6 @@ config :janus, JanusWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# reduce the number of rounds to speed up test suite
+config :pbkdf2_elixir, :rounds, 1
