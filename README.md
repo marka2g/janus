@@ -2,11 +2,12 @@
 *a p.o.c. app for a json-only Authentication Api Built with Elixir and Phoenix*
 
 ### ToDo's
-1. implement rails-reverse-proxy for existing output api `/v1/auth` akin to something discussed here: [Using phoenix with legacy rails app](https://littlelines.com/blog/2016/09/27/using-phoenix-with-a-legagy-rails-app)
+1. Gather requirments of existing Arcade implementation
 2. implement `sign_out`
-3. segregate `sing_in`/`sign_out` into its own `SessionController`
-4. implement `is_active` around subscriptions
-5. implement a `/api/arcade` endpoint that can return a `current_user` and serve as a kind of `ping` to see if the user is still logged in. currently, arcade hits middleware on the output api for this
+3. implement rails-reverse-proxy for existing output api `/v1/auth` akin to something discussed here: [Using phoenix with legacy rails app](https://littlelines.com/blog/2016/09/27/using-phoenix-with-a-legagy-rails-app)
+4. segregate `sing_in`/`sign_out` into its own `SessionController`
+5. implement `is_active` around subscriptions
+6. implement a `/api/arcade` endpoint that can return a `current_user` and serve as a kind of `ping` to see if the user is still logged in. currently, arcade hits middleware on the output api for this
 
 ## Curl the API
 >
@@ -262,9 +263,15 @@
 >[GCP Runtime on GCP](https://github.com/GoogleCloudPlatform/elixir-runtime)
 >
 >[logflare - nice streaming logs pipeline setup on gcp](https://github.com/Logflare/logflare)
->
 
-#### Auth with Phoenix
+#### JWT v. Sessions
+##### pro sessions
+> [Why JWTs are Bad](https://www.youtube.com/watch?v=GdJ0wFi1Jyo&t=682s)
+> 
+> [Stop Using JWT for Sessions](http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/)
+
+##### pro JWT
+#### Auththentication with Phoenix
 >[Phoenix.Token for API or Channels Authentication](https://hexdocs.pm/phoenix/Phoenix.Token.html)
 >
 >[Simple token authentication for Phoenix API](https://dev.to/mnishiguchi/simple-token-authentication-for-phoenix-json-api-1m05)
@@ -286,6 +293,12 @@
 
 #### Videos
 >[A Gentle Intro to Elixir Phoenix on GCP](https://www.youtube.com/watch?v=sJR4j9WBSR0)
+>
+> [Auth as a Microservice](https://www.youtube.com/watch?v=SLc3cTlypwM)
+>
+> [Randall Degges - Everything You Ever Wanted to Know About Web Authentication in Node](https://www.youtube.com/watch?v=i7of02icPyQ)
+>
+> [Authorization for Applications & APIs](https://www.youtube.com/watch?v=-a7JbXL0hq0)
 >
 
 ---
